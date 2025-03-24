@@ -89,6 +89,8 @@ int main (void)
 		} else if (ds18b20found) {
 			timeout = millis() + 2000;								// таймаут для определения отсутствия датчика
 		}
+
+		net_pool();
 	}
 }
 

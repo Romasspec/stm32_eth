@@ -175,7 +175,7 @@
 //--------------------------------------------------
 
 void enc28j60_init (void);
-void SPI_SendByte(uint8_t *data, uint8_t len);
+void SPI_SendByte(uint8_t data);
 void enc28j60_writeOp(uint8_t op,uint8_t addres, uint8_t data);
 uint8_t enc28j60_readOp(uint8_t op, uint8_t addres);
 

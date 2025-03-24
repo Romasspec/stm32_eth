@@ -5,6 +5,7 @@
 #include "ds18b20.h"
 #include "tm1637.h"
 #include "enc28j60.h"
+#include "net.h"
 
 
 //#include "MDR32F9Qx_config.h"
