@@ -15,9 +15,9 @@ static int gNextPacketPtr;
 static uint8_t SPIx_WriteRead(uint8_t Byte)
 {
 	uint8_t receivedbyte = 0;
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE));
+	while (!SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE));
 	SPI_I2S_SendData(SPI1, Byte);
-	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE));
+	while (!SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE));
 	receivedbyte = (uint8_t)(SPI_I2S_ReceiveData(SPI1));
 	return receivedbyte;
 }
@@ -140,7 +140,10 @@ void enc28j60_init (void)
 	enc28j60_writeOp(ENC28J60_SOFT_RESET,0,ENC28J60_SOFT_RESET);
 	delay_ms(2);
 	//проверим, что всё перезагрузилось
-	while(!(enc28j60_readOp(ENC28J60_READ_CTRL_REG,ESTAT)&ESTAT_CLKRDY));
+//	while(!(enc28j60_readOp(ENC28J60_READ_CTRL_REG,ESTAT)&ESTAT_CLKRDY));
+	if((enc28j60_readOp(ENC28J60_READ_CTRL_REG,ESTAT )& ESTAT_CLKRDY == 0x01)) {
+		GPIOC->ODR |= GPIO_Pin_14;
+	}
 
 	enc28j60_writeReg(ERXST,RXSTART_INIT);
 	enc28j60_writeReg(ERXRDPT,RXSTART_INIT);
