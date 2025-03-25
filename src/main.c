@@ -26,6 +26,7 @@ int main (void)
 	systic_init();
 	spi1_init();
 	enc28j60_init();
+	uart1_init();
 
 	task_ptr = &task_1ms;
 	task_1ms_ptr = &task_1ms_1;
@@ -50,7 +51,7 @@ int main (void)
 //	}
 
 	delay_ms(100);
-
+	uart1_send(0x55);
 	while (1)
 	{
 		(*task_ptr)();
@@ -90,7 +91,8 @@ int main (void)
 			timeout = millis() + 2000;								// таймаут для определения отсутствия датчика
 		}
 
-		net_pool();
+
+		uart_pool();
 	}
 }
 
@@ -143,7 +145,7 @@ void task_1ms_2(void)
 //=================================================================================
 void task_5ms_1(void)
 {
-	static uint8_t var1;
+//	static uint8_t var1;
 	static uint32_t time_task = 0, time_led_on;
 	uint32_t current_time = micros();
 	if ((int32_t)(current_time-time_task) >= 0)
@@ -157,6 +159,7 @@ void task_5ms_1(void)
 //		spi1_tx_buf[2] = 0x22;
 //		SPI_SendByte(spi1_tx_buf, 3);
 //		var1 = enc28j60_readOp(0x20, 0x1A);
+		net_pool();
 	}
 
 	if ((int32_t)(current_time-time_led_on) >= 0)
@@ -303,6 +306,7 @@ void gpio_init(void)
 	GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable, ENABLE);
 
 	/* Configure PA13 and PA14 in output open drive mode */
+	//TM1637 pin
 	GPIO_InitStructure.GPIO_Pin = TM1637_CLK_PIN | TM1637_DIO_PIN;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
@@ -314,6 +318,8 @@ void gpio_init(void)
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_Init(LED_PORT, &GPIO_InitStructure);
 //	GPIO_SetBits(LED_PORT, LED_pin);
+
+	//DS18B20 pin
 
 	GPIO_InitStructure.GPIO_Pin = DS18b20_pin;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -341,6 +347,19 @@ void gpio_init(void)
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_Init(ENC28J60_PORT, &GPIO_InitStructure);
 
+	//USAR1 pin
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+	//Debug pin
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
@@ -370,6 +389,27 @@ void spi1_init(void)
 
 }
 
+void uart1_init(void)
+{
+	USART_InitTypeDef UART_InitStructure;
+
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
+
+	UART_InitStructure.USART_BaudRate = 115200;
+	UART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+	UART_InitStructure.USART_Mode = USART_Mode_Rx|USART_Mode_Tx;
+	UART_InitStructure.USART_Parity = USART_Parity_No;
+	UART_InitStructure.USART_StopBits = USART_StopBits_1;
+	UART_InitStructure.USART_WordLength = USART_WordLength_8b;
+	USART_Init(USART1, &UART_InitStructure);
+
+	USART_ITConfig(USART1,USART_IT_RXNE, ENABLE);
+	USART_Cmd(USART1, ENABLE);
+	NVIC_EnableIRQ(USART1_IRQn);
+}
+
 void HardFault_Handler() {
-	while(1);
+	while(1) {
+
+	}
 }

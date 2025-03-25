@@ -6,7 +6,7 @@
 #include "tm1637.h"
 #include "enc28j60.h"
 #include "net.h"
-
+#include "uart.h"
 
 //#include "MDR32F9Qx_config.h"
 //#include "MDR32F9Qx_rst_clk.h"
@@ -57,5 +57,6 @@ void rcc_init(void);
 void gpio_init (void);
 void systic_init(void);
 void spi1_init(void);
+void uart1_init(void);
 
 #endif

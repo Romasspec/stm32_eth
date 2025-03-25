@@ -140,10 +140,10 @@ void enc28j60_init (void)
 	enc28j60_writeOp(ENC28J60_SOFT_RESET,0,ENC28J60_SOFT_RESET);
 	delay_ms(2);
 	//проверим, что всё перезагрузилось
-//	while(!(enc28j60_readOp(ENC28J60_READ_CTRL_REG,ESTAT)&ESTAT_CLKRDY));
-	if((enc28j60_readOp(ENC28J60_READ_CTRL_REG,ESTAT )& ESTAT_CLKRDY == 0x01)) {
-		GPIOC->ODR |= GPIO_Pin_14;
-	}
+	while(!(enc28j60_readOp(ENC28J60_READ_CTRL_REG,ESTAT)&ESTAT_CLKRDY));
+//	if(((enc28j60_readOp(ENC28J60_READ_CTRL_REG,ESTAT )& ESTAT_CLKRDY) == 0x01)) {
+//		GPIOC->ODR |= GPIO_Pin_14;
+//	}
 
 	enc28j60_writeReg(ERXST,RXSTART_INIT);
 	enc28j60_writeReg(ERXRDPT,RXSTART_INIT);
