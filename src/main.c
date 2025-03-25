@@ -91,7 +91,7 @@ int main (void)
 			timeout = millis() + 2000;								// таймаут для определения отсутствия датчика
 		}
 
-
+		net_pool();
 		uart_pool();
 	}
 }
@@ -159,7 +159,7 @@ void task_5ms_1(void)
 //		spi1_tx_buf[2] = 0x22;
 //		SPI_SendByte(spi1_tx_buf, 3);
 //		var1 = enc28j60_readOp(0x20, 0x1A);
-		net_pool();
+
 	}
 
 	if ((int32_t)(current_time-time_led_on) >= 0)

@@ -8,12 +8,11 @@ void uart1_send (uint8_t data)
 	USART_SendData(USART1, data);
 }
 
-void uart1_send_buf(uint8_t* str2, uint8_t strlen)
+void uart1_send_buf(uint8_t* str, uint8_t strlen)
 {
-
 	while (strlen--) {
-		uart1_send (*str2);
-		str2++;
+		uart1_send (*str);
+		str++;
 		GPIOC->ODR ^= GPIO_Pin_14;
 	}
 }
