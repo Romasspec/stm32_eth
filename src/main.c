@@ -342,9 +342,14 @@ void gpio_init(void)
 	GPIO_Init(ENC28J60_PORT, &GPIO_InitStructure);
 	GPIO_SetBits(ENC28J60_PORT, ENC28J60_CS_pin | ENC28J60_RST_pin);
 
-	GPIO_InitStructure.GPIO_Pin = ENC28J60_SPI1_pin;
+	GPIO_InitStructure.GPIO_Pin = ENC28J60_SPI1_TXpin;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	GPIO_Init(ENC28J60_PORT, &GPIO_InitStructure);
+
+	GPIO_InitStructure.GPIO_Pin = ENC28J60_SPI1_RXpin;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
 	GPIO_Init(ENC28J60_PORT, &GPIO_InitStructure);
 
 	//USAR1 pin

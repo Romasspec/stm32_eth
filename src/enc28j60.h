@@ -8,7 +8,8 @@
 
 #define ENC28J60_CS_pin			GPIO_Pin_8
 #define ENC28J60_RST_pin		GPIO_Pin_9
-#define ENC28J60_SPI1_pin		(GPIO_Pin_3|GPIO_Pin_4|GPIO_Pin_5)
+#define ENC28J60_SPI1_TXpin		(GPIO_Pin_3|GPIO_Pin_5)
+#define ENC28J60_SPI1_RXpin		(GPIO_Pin_4)
 #define ENC28J60_PORT			GPIOB
 
 
