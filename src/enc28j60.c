@@ -127,7 +127,7 @@ void enc28j60_init (void)
 	RST_0();
 	delay_ms(5);
 	RST_1();
-
+	uart1_send(0x31);
 //	while (rx_buf_tail != RXBUF_SIZE) {
 //		spi1_rx_buf[rx_buf_tail] = 0x00;
 //		rx_buf_tail++;
@@ -139,12 +139,13 @@ void enc28j60_init (void)
 
 	enc28j60_writeOp(ENC28J60_SOFT_RESET,0,ENC28J60_SOFT_RESET);
 	delay_ms(2);
+	uart1_send(0x32);
 	//проверим, что всё перезагрузилось
 	while(!(enc28j60_readOp(ENC28J60_READ_CTRL_REG,ESTAT)&ESTAT_CLKRDY));
 //	if(((enc28j60_readOp(ENC28J60_READ_CTRL_REG,ESTAT )& ESTAT_CLKRDY) == 0x01)) {
 //		GPIOC->ODR |= GPIO_Pin_14;
 //	}
-
+	uart1_send(0x33);
 	enc28j60_writeReg(ERXST,RXSTART_INIT);
 	enc28j60_writeReg(ERXRDPT,RXSTART_INIT);
 	enc28j60_writeReg(ERXND,RXSTOP_INIT);

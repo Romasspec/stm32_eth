@@ -43,6 +43,6 @@ void delay_ms(uint32_t ms)
 
 void systic_init(void)
 {
-	SysTick_Config (SystemCoreClock/1000);
-	usTicks = SystemCoreClock / 1000000;
+	SysTick_Config (72000000/1000);
+	usTicks = 72000000 / 1000000;
 }

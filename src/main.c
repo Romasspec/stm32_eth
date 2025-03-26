@@ -24,9 +24,14 @@ int main (void)
 	rcc_init();
 	gpio_init ();
 	systic_init();
-	spi1_init();
-	enc28j60_init();
 	uart1_init();
+	uart1_send(0x11);
+	spi1_init();
+	uart1_send(0x22);
+	enc28j60_init();
+	uart1_send(0x34);
+
+
 
 	task_ptr = &task_1ms;
 	task_1ms_ptr = &task_1ms_1;
